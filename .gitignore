@@ -87,3 +87,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+private.py
+input.txt
+output.txt
