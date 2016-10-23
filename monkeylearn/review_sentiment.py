@@ -68,7 +68,11 @@ def make_request(classifier_id, token, text_list):
 
 
 def main():
-    """ Make requests to aspect and sentiment classifiers and save the results to output file."""
+    """ Make requests to aspect and sentiment classifiers and save the results to output file.
+    The format of the output file will be:
+        review text, list of aspect pairs (probablity, label), sentiment pair (probabilty, label)
+        ...
+    """
     parser = prepare_parser()
     args = parser.parse_args()
     text_list = prepare_data(args.input)
@@ -79,7 +83,11 @@ def main():
     results = zip(text_list, aspect_result, sentiment_result)
     with open(args.output, 'w') as f:
         for result in results:
-            f.write(str(result))
+            aspects = []
+            for aspect in result[1]:
+                aspects.append((aspect[0]['probability'], aspect[0]['label']))
+            sentiment = (result[2][0]['probability'], result[2][0]['label'])
+            f.write('{},{},{}\n'.format(result[0], aspects, sentiment))
 
 
 if __name__ == '__main__':
