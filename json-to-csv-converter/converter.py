@@ -1,3 +1,8 @@
+"""
+Example of running the script:
+    python converter.py -i data_folder_with_json_files
+"""
+
 import argparse
 import csv
 import os
@@ -9,7 +14,7 @@ def prepare_parser():
     """ Parse the command line arguments.
 
     Arguments:
-        --input: Name of the input file, defaults to 'input.txt'.
+        --input: Name of the input data folder, defaults to 'data'.
         --output: Name of the output file, defaults to 'output.txt'.
     Returns:
         The parser with all the arguments.
@@ -22,6 +27,10 @@ def prepare_parser():
 
 
 def main():
+    """ Reads JSON files from input data folder and saves as CSV with labeled sentiments.
+    Labels are 1 for positive, 0 for negative.
+    """
+
     POSITIVE = 1
     NEGATIVE = 0
 

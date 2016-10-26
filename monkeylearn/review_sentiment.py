@@ -76,6 +76,8 @@ def make_request(classifier_id, token, text_list):
 
 
 def get_sentiments_from_csv(filename):
+    """ Read CSV and return list of labeled sentiments as 1 for positive, 0 for negative """
+
     with open(filename, 'r') as f:
         pd.options.display.max_colwidth = 999
         data = pd.read_csv(filename, usecols=['sentiment'])
@@ -84,13 +86,15 @@ def get_sentiments_from_csv(filename):
 
 
 def get_sentiments_from_results(results):
+    """ Filter sentiments from results and replace labels - 1 for Good (positive), 2 for Bad (negative) """
     sentiments = map(lambda x: 1 if x == 'Good' else 0, [result[0]['label'] for result in results])
     return sentiments
 
 
 def compare_results(labeled_sentiments, sentiment_results):
-        matches = [1 if sentiment == result else 0 for sentiment, result in zip(labeled_sentiments, sentiment_results)]
-        return matches
+    """ Compares sentiments labeled sentiments (i.e. from training set) with the ones returned from analysis. """
+    matches = [1 if sentiment == result else 0 for sentiment, result in zip(labeled_sentiments, sentiment_results)]
+    return matches
 
 
 def main():
@@ -118,6 +122,9 @@ def main():
                 aspects.append((aspect[0]['probability'], aspect[0]['label']))
             sentiment = (result[2][0]['probability'], result[2][0]['label'])
             f.write('{},{},{}\n'.format(result[0].encode('utf8'), aspects, sentiment))
+
+    """ If input data format is CSV compare labeled sentiments from CSV with results from analysis.
+    """
 
     if args.input.lower().endswith('.csv'):
         labeled_sentiments = get_sentiments_from_csv(args.input)
