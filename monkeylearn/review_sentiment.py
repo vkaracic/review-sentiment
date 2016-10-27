@@ -13,7 +13,6 @@ import json
 import requests
 
 import pandas as pd
-import sys
 
 
 def prepare_parser():
@@ -103,10 +102,6 @@ def main():
             ...
     """
 
-    # Hack enables setting default encoding to UTF-8, without reloading setdefaultencoding() does not exist.
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-
     parser = prepare_parser()
     args = parser.parse_args()
     text_list = prepare_data(args.input)
@@ -122,7 +117,7 @@ def main():
             for aspect in result[1]:
                 aspects.append((aspect[0]['probability'], aspect[0]['label']))
             sentiment = (result[2][0]['probability'], result[2][0]['label'])
-            f.write('{},{},{}\n'.format(result[0].encode('utf8'), aspects, sentiment))
+            f.write('{},{},{}\n'.format(result[0], aspects, sentiment))
 
     # If input data format is CSV compare labeled sentiments from CSV with results from analysis.
     if args.input.lower().endswith('.csv'):
