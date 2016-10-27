@@ -50,7 +50,6 @@ def prepare_data(filename):
         return f.read().splitlines()
 
 
-
 def make_request(classifier_id, token, text_list):
     """ Make a request to a MonkeyLearn classifier.
 
@@ -98,14 +97,16 @@ def compare_results(labeled_sentiments, sentiment_results):
 
 
 def main():
+    """ Make requests to aspect and sentiment classifiers and save the results to output file.
+        The format of the output file will be:
+            review text, list of aspect pairs (probablity, label), sentiment pair (probabilty, label)
+            ...
+    """
+
+    # Hack enables setting default encoding to UTF-8, without reloading setdefaultencoding() does not exist.
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-    """ Make requests to aspect and sentiment classifiers and save the results to output file.
-    The format of the output file will be:
-        review text, list of aspect pairs (probablity, label), sentiment pair (probabilty, label)
-        ...
-    """
     parser = prepare_parser()
     args = parser.parse_args()
     text_list = prepare_data(args.input)
@@ -123,9 +124,7 @@ def main():
             sentiment = (result[2][0]['probability'], result[2][0]['label'])
             f.write('{},{},{}\n'.format(result[0].encode('utf8'), aspects, sentiment))
 
-    """ If input data format is CSV compare labeled sentiments from CSV with results from analysis.
-    """
-
+    # If input data format is CSV compare labeled sentiments from CSV with results from analysis.
     if args.input.lower().endswith('.csv'):
         labeled_sentiments = get_sentiments_from_csv(args.input)
         labeled_results = get_sentiments_from_results(sentiment_result)
