@@ -132,11 +132,9 @@ def main():
         relative_matching = sum(matches) / float(len(matches))
 
         with open('matches.txt', 'w') as f:
-            f.write('Matches by row:\n')
-            i = 1
-            for match in matches:
-                f.write('{}. {}\n'.format(i, match))
-                i += 1
+            f.write('Matches by row (Labeled sentiment, Analysis result, Match):\n')
+            for labeled_sentiment, labeled_result, match in zip(labeled_sentiments, labeled_results, matches):
+                f.write('{}\t{}\t{}\n'.format(labeled_sentiment, labeled_result, match))
             f.write('\nRelative matching: {}\n'.format(relative_matching))
 
 
